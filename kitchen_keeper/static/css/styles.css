@@ -1,0 +1,75 @@
+:root {
+    --kk-purple: #6f42c1;
+    --kk-purple-dark: #1f1b2e;
+    --kk-purple-dark-border: #443c5e;
+    --kk-purple-mid: #2a243d;
+    --kk-purple-card: #2f2942;
+
+    --kk-purple-rgb: 111, 66, 193;
+
+}
+
+/* Bootstrap-style custom button variant */
+.btn-purple {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--kk-purple);
+    --bs-btn-border-color: var(--kk-purple);
+
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--kk-purple-dark);
+    --bs-btn-hover-border-color: var(--kk-purple-dark);
+
+    --bs-btn-focus-shadow-rgb: var(--kk-purple-rgb);
+
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--kk-purple-dark);
+    --bs-btn-active-border-color: var(--kk-purple-dark);
+}
+
+.btn-outline-purple {
+    --bs-btn-color: var(--kk-purple);
+    --bs-btn-border-color: var(--kk-purple);
+
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--kk-purple);
+    --bs-btn-hover-border-color: var(--kk-purple);
+
+    --bs-btn-focus-shadow-rgb: var(--kk-purple-rgb);
+
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--kk-purple-dark);
+    --bs-btn-active-border-color: var(--kk-purple-dark);
+}
+
+/* Utility classes */
+
+/* Background Utilities */
+.bg-purple {
+    background-color: var(--kk-purple) !important;
+}
+
+.bg-purple-dark {
+    background-color: var(--kk-purple-dark) !important;
+}
+
+.bg-purple-mid {
+    background-color: var(--kk-purple-mid) !important;
+}
+
+.bg-purple-card {
+    background-color: var(--kk-purple-card) !important;
+}
+
+/* Text Utilities */
+.text-purple {
+    color: var(--kk-purple) !important;
+}
+
+/* Border Utilities */
+.border-purple {
+    border-color: var(--kk-purple) !important;
+}
+
+.border-purple-dark {
+    border-color: var(--kk-purple-dark-border) !important;
+}

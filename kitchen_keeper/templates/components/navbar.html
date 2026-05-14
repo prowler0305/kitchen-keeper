@@ -1,0 +1,18 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-purple-mid border-bottom border-purple-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-purple" href="{{ url_for('main.home') }}">
+      Kitchen Keeper
+    </a>
+    <div class="navbar-nav ms-auto">
+      <a class="nav-link"
+         href="{{ url_for('recipes.list') }}">
+        Recipes
+      </a>
+
+      <a class="btn btn-purple ms-3"
+         href="{{ url_for('recipes.create') }}">
+        Add Recipe
+      </a>
+    </div>
+  </div>
+</nav>
