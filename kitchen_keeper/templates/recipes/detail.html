@@ -1,3 +1,82 @@
 {% extends "base.html" %}
 
 {% block title %}{{ recipe.title }} | Kitchen Keeper{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <span class="badge bg-purple mb-2">{{ recipe.category }}</span>
+        <h1 class="mb-2">{{ recipe.title }}</h1>
+        <p class="text-light opacity-75 mb-0">{{ recipe.description }}</p>
+    </div>
+
+    <a href="{{ url_for('recipes.edit', recipe_id=recipe.id) }}"
+       class="btn btn-purple">
+        Edit Recipe
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-lg-8">
+        <section class="card bg-purple-card text-light border-purple-dark shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Ingredients</h2>
+
+                <ul class="list-group list-group-flush">
+                    {% for ingredient in recipe.ingredients %}
+                        <li class="list-group-item bg-purple-card text-light border-purple-dark">
+                            {{ ingredient }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section class="card bg-purple-card text-light border-purple-dark shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Instructions</h2>
+
+                <ol class="mb-0">
+                    {% for step in recipe.instructions %}
+                        <li class="mb-3">
+                            {{ step }}
+                        </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <section class="card bg-purple-card text-light border-purple-dark shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Recipe Details</h2>
+
+                <div class="mb-2">
+                    <strong>Prep:</strong> {{ recipe.prep_time }}
+                </div>
+
+                <div class="mb-2">
+                    <strong>Cook:</strong> {{ recipe.cook_time }}
+                </div>
+
+                <div class="mb-2">
+                    <strong>Servings:</strong> {{ recipe.servings }}
+                </div>
+            </div>
+        </section>
+
+        <section class="card bg-purple-card text-light border-purple-dark shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Tags</h2>
+
+                {% for tag in recipe.tags %}
+                    <span class="badge bg-purple me-1 mb-1">
+                        {{ tag }}
+                    </span>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

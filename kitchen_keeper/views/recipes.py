@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, abort
 from flask.views import MethodView
 
 recipe_bp = Blueprint("recipes", __name__, url_prefix="/recipes")
@@ -13,6 +13,20 @@ SAMPLE_RECIPES = [
         "prep_time": "20 min",
         "cook_time": "30 min",
         "servings": 4,
+        "tags": ["Family Favorite", "Comfort Food"],
+        "ingredients": [
+            "2 chicken breasts",
+            "1 cup breadcrumbs",
+            "1 cup marinara sauce",
+            "1 cup shredded mozzarella",
+            "1/2 cup grated parmesan"
+        ],
+        "instructions": [
+            "Preheat oven to 400°F",
+            "Bread the chicken and pan-fry until golder",
+            "Top with marinara and cheese.",
+            "Bake until cheese is melted and check is cooked through."
+        ]
     },
     {
         "id": 2,
@@ -50,17 +64,27 @@ class RecipeListView(MethodView):
             recipes=SAMPLE_RECIPES
         )
 
+
 class RecipeDetailView(MethodView):
     def get(self, recipe_id: int):
-        return render_template(f"{TEMPLATE_PREFIX}detail.html")
+        recipe = next(
+            (recipe for recipe in SAMPLE_RECIPES if recipe["id"] == recipe_id),
+            None
+        )
+        if recipe is None:
+            abort(404)
+        return render_template(f"{TEMPLATE_PREFIX}detail.html", recipe=recipe)
+
 
 class RecipeCreateView(MethodView):
     def get(self):
         return render_template(f"{TEMPLATE_PREFIX}create.html")
 
+
 class RecipeEditView(MethodView):
     def get(self, recipe_id: int):
         return render_template(f"{TEMPLATE_PREFIX}edit.html")
+
 
 recipe_bp.add_url_rule("/", view_func=RecipeListView.as_view("list"))
 recipe_bp.add_url_rule("/new", view_func=RecipeCreateView.as_view("create"))
