@@ -1,0 +1,262 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">{{ page_title }}</h1>
+        <p class="text-light opacity-75 mb-0">
+            Build and organize your family recipes.
+        </p>
+    </div>
+
+    <a href="{{ cancel_url }}"
+       class="btn btn-outline-purple">
+        Cancel
+    </a>
+</div>
+
+<form>
+    <div class="row g-4">
+
+        <!-- Left Column -->
+        <div class="col-12 col-lg-8">
+
+            <!-- Basic Info -->
+            <section class="card bg-purple-card text-light border-purple-dark shadow-sm mb-4">
+                <div class="card-body">
+
+                    <h2 class="h4 mb-4">Recipe Information</h2>
+
+                    <div class="mb-3">
+                        <label class="form-label">Recipe Title</label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ recipe.title if recipe else '' }}"
+                            placeholder="Ex: Chicken Parmesan"
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+
+                        <textarea
+                            class="form-control"
+                            rows="3"
+                            placeholder="Short description of the recipe"
+                        >{{ recipe.description if recipe else '' }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Category</label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ recipe.category if recipe else '' }}"
+                                placeholder="Dinner"
+                            >
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Prep Time</label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ recipe.prep_time if recipe else '' }}"
+                                placeholder="20 min"
+                            >
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Cook Time</label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ recipe.cook_time if recipe else '' }}"
+                                placeholder="30 min"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label">Servings</label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            value="{{ recipe.servings if recipe else '' }}"
+                            placeholder="4"
+                        >
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Ingredients -->
+            <section class="card bg-purple-card text-light border-purple-dark shadow-sm mb-4">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="h4 mb-0">Ingredients</h2>
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-purple btn-sm">
+                            Add Ingredient
+                        </button>
+                    </div>
+
+                    {% if recipe and recipe.ingredients %}
+                        {% for ingredient in recipe.ingredients %}
+                            <div class="input-group mb-3">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value="{{ ingredient }}"
+                                >
+
+                                <button
+                                    class="btn btn-outline-danger"
+                                    type="button">
+                                    Remove
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="input-group mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Ex: 2 chicken breasts"
+                            >
+
+                            <button
+                                class="btn btn-outline-danger"
+                                type="button">
+                                Remove
+                            </button>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </section>
+
+            <!-- Instructions -->
+            <section class="card bg-purple-card text-light border-purple-dark shadow-sm">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="h4 mb-0">Instructions</h2>
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-purple btn-sm">
+                            Add Step
+                        </button>
+                    </div>
+
+                    {% if recipe and recipe.instructions %}
+                        {% for step in recipe.instructions %}
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">
+                                    {{ loop.index }}
+                                </span>
+
+                                <textarea
+                                    class="form-control"
+                                    rows="2">{{ step }}</textarea>
+
+                                <button
+                                    class="btn btn-outline-danger"
+                                    type="button">
+                                    Remove
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                1
+                            </span>
+
+                            <textarea
+                                class="form-control"
+                                rows="2"
+                                placeholder="Describe the cooking step"></textarea>
+
+                            <button
+                                class="btn btn-outline-danger"
+                                type="button">
+                                Remove
+                            </button>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-12 col-lg-4">
+
+            <!-- Tags -->
+            <section class="card bg-purple-card text-light border-purple-dark shadow-sm mb-4">
+                <div class="card-body">
+
+                    <h2 class="h5 mb-3">Tags</h2>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Ex: Dessert, Quick Dinner"
+                    >
+
+                    <div class="form-text text-light opacity-75">
+                        Separate tags with commas.
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Recipe Image -->
+            <section class="card bg-purple-card text-light border-purple-dark shadow-sm mb-4">
+                <div class="card-body">
+
+                    <h2 class="h5 mb-3">Recipe Image</h2>
+
+                    <div class="bg-purple-mid rounded d-flex align-items-center justify-content-center"
+                         style="height: 220px;">
+                        <span class="text-light opacity-75">
+                            Image Preview
+                        </span>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-purple w-100 mt-3">
+                        Upload Image
+                    </button>
+
+                </div>
+            </section>
+
+            <!-- Submit -->
+            <section class="card bg-purple-card text-light border-purple-dark shadow-sm">
+                <div class="card-body">
+
+                    <button
+                        type="submit"
+                        class="btn btn-purple w-100">
+                        {{ submit_label }}
+                    </button>
+
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+</form>
