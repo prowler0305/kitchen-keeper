@@ -83,7 +83,13 @@ class RecipeCreateView(MethodView):
 
 class RecipeEditView(MethodView):
     def get(self, recipe_id: int):
-        return render_template(f"{TEMPLATE_PREFIX}edit.html")
+        recipe = next(
+            (recipe for recipe in SAMPLE_RECIPES if recipe["id"] == recipe_id),
+            None
+        )
+        if recipe is None:
+            abort(404)
+        return render_template(f"{TEMPLATE_PREFIX}edit.html", recipe=recipe)
 
 
 recipe_bp.add_url_rule("/", view_func=RecipeListView.as_view("list"))

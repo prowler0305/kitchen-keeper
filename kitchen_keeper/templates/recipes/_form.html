@@ -102,43 +102,48 @@
                         <h2 class="h4 mb-0">Ingredients</h2>
 
                         <button
+                            id="add-ingredient-btn"
                             type="button"
                             class="btn btn-outline-purple btn-sm">
                             Add Ingredient
                         </button>
                     </div>
 
-                    {% if recipe and recipe.ingredients %}
-                        {% for ingredient in recipe.ingredients %}
-                            <div class="input-group mb-3">
+                    <div id="ingredients-list">
+                        {% if recipe and recipe.ingredients %}
+                            {% for ingredient in recipe.ingredients %}
+                                <div class="input-group mb-3 ingredient-row">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="ingredients[]"
+                                        value="{{ ingredient }}"
+                                    >
+
+                                    <button
+                                        class="btn btn-outline-danger remove-ingredient-btn"
+                                        type="button">
+                                        Remove
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="input-group mb-3 ingredient-row">
                                 <input
                                     type="text"
                                     class="form-control"
-                                    value="{{ ingredient }}"
+                                    name="ingredients[]"
+                                    placeholder="Ex: 2 chicken breasts"
                                 >
 
                                 <button
-                                    class="btn btn-outline-danger"
+                                    class="btn btn-outline-danger remove-ingredient-btn"
                                     type="button">
                                     Remove
                                 </button>
                             </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="input-group mb-3">
-                            <input
-                                type="text"
-                                class="form-control"
-                                placeholder="Ex: 2 chicken breasts"
-                            >
-
-                            <button
-                                class="btn btn-outline-danger"
-                                type="button">
-                                Remove
-                            </button>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
 
                 </div>
             </section>
@@ -151,48 +156,51 @@
                         <h2 class="h4 mb-0">Instructions</h2>
 
                         <button
+                            id="add-step-btn"
                             type="button"
                             class="btn btn-outline-purple btn-sm">
                             Add Step
                         </button>
                     </div>
 
-                    {% if recipe and recipe.instructions %}
-                        {% for step in recipe.instructions %}
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">
-                                    {{ loop.index }}
-                                </span>
+                    <div id="instructions-list">
+                        {% if recipe and recipe.instructions %}
+                            {% for step in recipe.instructions %}
+                                <div class="input-group mb-3 instruction-row">
+                                    <span class="input-group-text step-number">
+                                        {{ loop.index }}
+                                    </span>
+
+                                    <textarea
+                                        class="form-control"
+                                        name="instructions[]"
+                                        rows="2">{{ step }}</textarea>
+
+                                    <button
+                                        class="btn btn-outline-danger remove-step-btn"
+                                        type="button">
+                                        Remove
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="input-group mb-3 instruction-row">
+                                <span class="input-group-text step-number">1</span>
 
                                 <textarea
                                     class="form-control"
-                                    rows="2">{{ step }}</textarea>
+                                    name="instructions[]"
+                                    rows="2"
+                                    placeholder="Describe the cooking step"></textarea>
 
                                 <button
-                                    class="btn btn-outline-danger"
+                                    class="btn btn-outline-danger remove-step-btn"
                                     type="button">
                                     Remove
                                 </button>
                             </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                1
-                            </span>
-
-                            <textarea
-                                class="form-control"
-                                rows="2"
-                                placeholder="Describe the cooking step"></textarea>
-
-                            <button
-                                class="btn btn-outline-danger"
-                                type="button">
-                                Remove
-                            </button>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
 
                 </div>
             </section>
