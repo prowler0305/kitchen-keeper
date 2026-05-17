@@ -7,13 +7,21 @@
     <div>
         <span class="badge bg-purple mb-2">{{ recipe.category }}</span>
         <h1 class="mb-2">{{ recipe.title }}</h1>
-        <p class="text-light opacity-75 mb-0">{{ recipe.description }}</p>
+        <p class="opacity-75 mb-0">{{ recipe.description }}</p>
     </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('recipes.edit', recipe_id=recipe.id) }}"
+           class="btn btn-purple">
+            Edit Recipe
+        </a>
 
-    <a href="{{ url_for('recipes.edit', recipe_id=recipe.id) }}"
-       class="btn btn-purple">
-        Edit Recipe
-    </a>
+        <form method="POST"
+              action="{{ url_for('recipes.delete', recipe_id=recipe.id) }}">
+            <button type="submit" class="btn btn-outline-danger">
+                Delete Recipe
+            </button>
+        </form>
+    </div>
 </div>
 
 <div class="row g-4">
@@ -70,11 +78,13 @@
             <div class="card-body">
                 <h2 class="h5 mb-3">Tags</h2>
 
-                {% for tag in recipe.tags %}
-                    <span class="badge bg-purple me-1 mb-1">
-                        {{ tag }}
-                    </span>
-                {% endfor %}
+                {% if recipe.tags %}
+                    {% for tag in recipe.tags.split(",") %}
+                        <span class="badge bg-purple me-1 mb-1">
+                            {{ tag.strip() }}
+                        </span>
+                    {% endfor %}
+                {% endif %}
             </div>
         </section>
     </div>

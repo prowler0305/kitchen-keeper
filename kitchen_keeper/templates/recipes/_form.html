@@ -6,13 +6,26 @@
         </p>
     </div>
 
-    <a href="{{ cancel_url }}"
-       class="btn btn-outline-purple">
-        Cancel
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ cancel_url }}"
+           class="btn btn-outline-purple">
+            Cancel
+        </a>
+
+        {% if recipe %}
+            <form method="POST"
+                  action="{{ url_for('recipes.delete', recipe_id=recipe.id) }}"
+                  onsubmit="return confirm('Delete this recipe? This cannot be undone.');">
+                <button type="submit"
+                        class="btn btn-outline-danger">
+                    Delete
+                </button>
+            </form>
+        {% endif %}
+    </div>
 </div>
 
-<form>
+<form method="POST">
     <div class="row g-4">
 
         <!-- Left Column -->

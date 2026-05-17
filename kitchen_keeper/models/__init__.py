@@ -1,0 +1,1 @@
+from kitchen_keeper.models.recipe import Recipe
