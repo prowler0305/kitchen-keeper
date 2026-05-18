@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, request, redirect, url_for
+from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 from flask.views import MethodView
 from kitchen_keeper.extensions.database import db
 from kitchen_keeper.models import Recipe, RecipeIngredient, RecipeInstruction
@@ -16,59 +16,6 @@ RECIPE_FORM_FIELDS = {
     "servings": int,
     "tags": str,
 }
-
-SAMPLE_RECIPES = [
-    {
-        "id": 1,
-        "title": "Chicken Parmesan",
-        "description": "Crispy chicken with marinara and melted cheese.",
-        "category": "Dinner",
-        "prep_time": "20 min",
-        "cook_time": "30 min",
-        "servings": 4,
-        "tags": ["Family Favorite", "Comfort Food"],
-        "ingredients": [
-            "2 chicken breasts",
-            "1 cup breadcrumbs",
-            "1 cup marinara sauce",
-            "1 cup shredded mozzarella",
-            "1/2 cup grated parmesan"
-        ],
-        "instructions": [
-            "Preheat oven to 400°F",
-            "Bread the chicken and pan-fry until golder",
-            "Top with marinara and cheese.",
-            "Bake until cheese is melted and check is cooked through."
-        ]
-    },
-    {
-        "id": 2,
-        "title": "Banana Bread",
-        "description": "A soft, sweet loaf for using ripe bananas.",
-        "category": "Baking",
-        "prep_time": "15 min",
-        "cook_time": "55 min",
-        "servings": 8,
-    },
-    {
-        "id": 3,
-        "title": "Creamy Tuscan Pasta",
-        "description": "A rich garlic parmesan pasta with spinach and sun-dried tomatoes.",
-        "category": "Pasta",
-        "prep_time": "15 min",
-        "cook_time": "25 min",
-        "servings": 6,
-    },
-    {
-        "id": 4,
-        "title": "Classic Beef Tacos",
-        "description": "Seasoned ground beef tacos with fresh toppings and shredded cheese.",
-        "category": "Mexican",
-        "prep_time": "10 min",
-        "cook_time": "20 min",
-        "servings": 4,
-    },
-]
 
 def apply_recipe_form(recipe: Recipe) -> None:
     for field, converter in RECIPE_FORM_FIELDS.items():
@@ -131,7 +78,7 @@ class RecipeCreateView(MethodView):
 
         db.session.add(recipe)
         db.session.commit()
-
+        flash("Recipe created successfully!", "success")
         return redirect(url_for("recipes.detail", recipe_id=recipe.id))
 
 class RecipeEditView(MethodView):
@@ -149,6 +96,7 @@ class RecipeEditView(MethodView):
         apply_recipe_form(recipe)
 
         db.session.commit()
+        flash("Recipe updated successfully!", "success")
         return redirect(url_for("recipes.detail", recipe_id=recipe.id))
 
 
@@ -158,7 +106,7 @@ class RecipeDeleteView(MethodView):
 
         db.session.delete(recipe)
         db.session.commit()
-
+        flash("Recipe deleted successfully!", "success")
         return redirect(url_for("recipes.list"))
 
 recipe_bp.add_url_rule("/", view_func=RecipeListView.as_view("list"))
