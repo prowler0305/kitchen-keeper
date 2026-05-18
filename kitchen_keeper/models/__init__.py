@@ -1,1 +1,1 @@
-from kitchen_keeper.models.recipe import Recipe
+from kitchen_keeper.models.recipe import Recipe, RecipeIngredient, RecipeInstruction

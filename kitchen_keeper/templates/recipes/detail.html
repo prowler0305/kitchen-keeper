@@ -33,7 +33,7 @@
                 <ul class="list-group list-group-flush">
                     {% for ingredient in recipe.ingredients %}
                         <li class="list-group-item bg-purple-card text-light border-purple-dark">
-                            {{ ingredient }}
+                            {{ ingredient.text }}
                         </li>
                     {% endfor %}
                 </ul>
@@ -47,7 +47,7 @@
                 <ol class="mb-0">
                     {% for step in recipe.instructions %}
                         <li class="mb-3">
-                            {{ step }}
+                            {{ step.text }}
                         </li>
                     {% endfor %}
                 </ol>

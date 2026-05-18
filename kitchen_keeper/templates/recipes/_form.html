@@ -130,13 +130,15 @@
 
                     <div id="ingredients-list">
                         {% if recipe and recipe.ingredients %}
+<!--                        Edit flow-->
                             {% for ingredient in recipe.ingredients %}
-                                <div class="input-group mb-3 ingredient-row">
+                                <div class="input-group mb-3
+                                 ingredient-row">
                                     <input
                                         type="text"
                                         class="form-control"
                                         name="ingredients[]"
-                                        value="{{ ingredient }}"
+                                        value="{{ ingredient.text }}"
                                     >
 
                                     <button
@@ -147,6 +149,7 @@
                                 </div>
                             {% endfor %}
                         {% else %}
+<!--                        Create Flow-->
                             <div class="input-group mb-3 ingredient-row">
                                 <input
                                     type="text"
@@ -184,6 +187,7 @@
 
                     <div id="instructions-list">
                         {% if recipe and recipe.instructions %}
+<!--                        Edit flow-->
                             {% for step in recipe.instructions %}
                                 <div class="input-group mb-3 instruction-row">
                                     <span class="input-group-text step-number">
@@ -193,7 +197,8 @@
                                     <textarea
                                         class="form-control"
                                         name="instructions[]"
-                                        rows="2">{{ step }}</textarea>
+                                        rows="2">{{ step.text }}
+                                    </textarea>
 
                                     <button
                                         class="btn btn-outline-danger remove-step-btn"
@@ -203,6 +208,7 @@
                                 </div>
                             {% endfor %}
                         {% else %}
+<!--                        Create flow-->
                             <div class="input-group mb-3 instruction-row">
                                 <span class="input-group-text step-number">1</span>
 

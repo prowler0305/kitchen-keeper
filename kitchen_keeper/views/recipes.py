@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for
 from flask.views import MethodView
 from kitchen_keeper.extensions.database import db
-from kitchen_keeper.models import Recipe
+from kitchen_keeper.models import Recipe, RecipeIngredient, RecipeInstruction
 from sqlalchemy import select
 
 recipe_bp = Blueprint("recipes", __name__, url_prefix="/recipes")
@@ -82,6 +82,19 @@ def apply_recipe_form(recipe: Recipe) -> None:
 
         setattr(recipe, field, value)
 
+    recipe.ingredients = [
+        RecipeIngredient(position=index, text=value.strip())
+        for index, value in enumerate(request.form.getlist("ingredients[]"), start=1)
+        if value.strip()
+    ]
+
+    recipe.instructions = [
+        RecipeInstruction(position=index, text=value.strip())
+        for index, value in enumerate(request.form.getlist("instructions[]"), start=1)
+        if value.strip()
+    ]
+
+
 class RecipeListView(MethodView):
     def get(self):
         recipes = db.session.execute(select(Recipe)).scalars().all()
@@ -132,6 +145,7 @@ class RecipeEditView(MethodView):
         :return:
         """
         recipe = db.get_or_404(Recipe, recipe_id)
+
         apply_recipe_form(recipe)
 
         db.session.commit()
