@@ -16,6 +16,7 @@
             <form method="POST"
                   action="{{ url_for('recipes.delete', recipe_id=recipe.id) }}"
                   onsubmit="return confirm('Delete this recipe? This cannot be undone.');">
+                {% include "includes/csrf_token.html" %}
                 <button type="submit"
                         class="btn btn-outline-danger">
                     Delete
@@ -26,6 +27,7 @@
 </div>
 
 <form method="POST">
+    {% include "includes/csrf_token.html" %}
     <div class="row g-4">
 
         <!-- Left Column -->

@@ -9,7 +9,7 @@ class Config:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
-
+    WTF_CSRF_ENABLED = True
 
 class DevelopmentConfig(Config):
     DEBUG = True

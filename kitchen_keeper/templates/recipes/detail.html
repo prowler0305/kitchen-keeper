@@ -17,6 +17,7 @@
 
         <form method="POST"
               action="{{ url_for('recipes.delete', recipe_id=recipe.id) }}">
+            {% include "includes/csrf_token.html" %}
             <button type="submit" class="btn btn-outline-danger">
                 Delete Recipe
             </button>
