@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 
 class Config:
@@ -10,6 +11,10 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
     WTF_CSRF_ENABLED = True
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    UPLOAD_FOLDER = BASE_DIR / "instance" / "uploads"
+    RECIPE_IMAGE_UPLOAD_FOLDER = UPLOAD_FOLDER / "recipes"
+
 
 class DevelopmentConfig(Config):
     DEBUG = True

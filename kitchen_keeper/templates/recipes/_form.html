@@ -28,7 +28,7 @@
 
 {% include "includes/form_errors.html" %}
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {% include "includes/csrf_token.html" %}
     <div class="row g-4">
 
@@ -267,17 +267,37 @@
 
                     <div class="bg-purple-mid rounded d-flex align-items-center justify-content-center"
                          style="height: 220px;">
-                        <span class="text-light opacity-75">
-                            Image Preview
-                        </span>
+
+                        {% if recipe and recipe.image_filename is defined and recipe.image_filename %}
+                            <img
+                                id="recipe-image-preview"
+                                src="{{ url_for('recipes.image', filename=recipe.image_filename) }}"
+                                alt="{{ recipe.title}}"
+                                class="img-fluid rounded w-100 h-100 mb-3"
+                                style="object-fit: cover;"
+                            >
+                        {% else %}
+                            <img
+                                id="recipe-image-preview"
+                                src=""
+                                alt="Recipe preview"
+                                class="img-fluid w-100 h-100 d-none"
+                                style="object-fit: cover;"
+                            >
+                            <span id="recipe-image-placeholder"
+                                  class="text-light opacity-75">
+                                Image Preview
+                            </span>
+                        {% endif %}
                     </div>
 
-                    <button
-                        type="button"
-                        class="btn btn-outline-purple w-100 mt-3">
-                        Upload Image
-                    </button>
-
+                    <input
+                        id="recipe-image-input"
+                        type="file"
+                        name="image"
+                        class="form-control mt-3"
+                        accept="image/*"
+                    >
                 </div>
             </section>
 

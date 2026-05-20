@@ -27,6 +27,8 @@ class Recipe(db.Model):
         order_by="RecipeInstruction.position",
     )
 
+    image_filename = db.Column(db.String(255), nullable=True)
+
 
 class RecipeIngredient(db.Model):
     __tablename__ = 'recipe_ingredients'

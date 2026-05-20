@@ -80,3 +80,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const imageInput = document.getElementById("recipe-image-input");
+    const imagePreview = document.getElementById("recipe-image-preview");
+    const imagePlaceholder = document.getElementById("recipe-image-placeholder");
+
+    if (!imageInput || !imagePreview) {
+        return;
+    }
+
+    imageInput.addEventListener("change", () => {
+        const file = imageInput.files?.[0];
+
+        if (!file) {
+            return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+            imageInput.value = "";
+            return;
+        }
+
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreview.classList.remove("d-none");
+
+        if (imagePlaceholder) {
+            imagePlaceholder.classList.add("d-none");
+        }
+    });
+});

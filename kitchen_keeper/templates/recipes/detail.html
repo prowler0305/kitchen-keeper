@@ -6,8 +6,20 @@
 <div class="d-flex justify-content-between align-items-start mb-4">
     <div>
         <span class="badge bg-purple mb-2">{{ recipe.category }}</span>
-        <h1 class="mb-2">{{ recipe.title }}</h1>
-        <p class="opacity-75 mb-0">{{ recipe.description }}</p>
+        <h1 class="mb-3">{{ recipe.title }}</h1>
+        {% if recipe.image_filename %}
+            <section class="card bg-purple-card border-purple-dark shadow-sm mb-4 overflow-hidden">
+                <div class="card-body">
+                    <img
+                            src="{{ url_for('recipes.image', filename=recipe.image_filename) }}"
+                            alt="{{recipe.title }}"
+                            class="img-fluid rounded shadow-sm mb-4"
+                            style="max-height: 350px; object-fit: cover;"
+                    >
+                    <p class="opacity-75 mb-0 text-white">{{ recipe.description }}</p>
+                </div>
+            </section>
+        {% endif %}
     </div>
     <div class="d-flex gap-2">
         <a href="{{ url_for('recipes.edit', recipe_id=recipe.id) }}"
@@ -85,6 +97,10 @@
                             {{ tag.strip() }}
                         </span>
                     {% endfor %}
+                {% else %}
+                    <p class="text-light opacity-75 mb-0">
+                       No tags
+                    </p>
                 {% endif %}
             </div>
         </section>

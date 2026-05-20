@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
+from flask import Blueprint, render_template, abort, request, redirect, url_for, flash, send_from_directory, current_app
 from flask.views import MethodView
 from kitchen_keeper.extensions.database import db
 from kitchen_keeper.forms import load_form_with_schema, build_form_view_model
 from kitchen_keeper.models import Recipe, RecipeIngredient, RecipeInstruction
 from kitchen_keeper.schemas.recipe import RecipeFormSchema
+from kitchen_keeper.uploads import save_recipe_image
 from marshmallow import ValidationError
 from sqlalchemy import select, inspect
 
@@ -90,6 +91,20 @@ class RecipeCreateView(MethodView):
         recipe = Recipe()
         apply_recipe_form(recipe, validated_data)
 
+        try:
+            image_filename = save_recipe_image(request.files.get("image"))
+        except ValueError as error:
+            return render_template(
+                f"{TEMPLATE_PREFIX}create.html",
+                recipe=build_form_view_model(
+                    schema,
+                    request.form
+                ),
+                errors={"image": [str(error)]}
+            )
+        if image_filename:
+            recipe.image_filename = image_filename
+
         db.session.add(recipe)
         db.session.commit()
         flash("Recipe created successfully!", "success")
@@ -124,6 +139,22 @@ class RecipeEditView(MethodView):
 
         apply_recipe_form(recipe=recipe, data=validated_data)
 
+
+        try:
+            image_filename = save_recipe_image(request.files.get("image"))
+        except ValueError as error:
+            return render_template(
+                f"{TEMPLATE_PREFIX}create.html",
+                recipe=build_form_view_model(
+                    schema,
+                    request.form,
+                    id=recipe.id
+                ),
+                errors={"image": [str(error)]}
+            )
+        if image_filename:
+            recipe.image_filename = image_filename
+
         db.session.commit()
         flash("Recipe updated successfully!", "success")
         return redirect(url_for("recipes.detail", recipe_id=recipe.id))
@@ -138,11 +169,21 @@ class RecipeDeleteView(MethodView):
         flash("Recipe deleted successfully!", "success")
         return redirect(url_for("recipes.list"))
 
+
+class RecipeImageView(MethodView):
+    def get(self, filename):
+        return send_from_directory(
+            current_app.config.get("RECIPE_IMAGE_UPLOAD_FOLDER"),
+            filename
+        )
+
+
 recipe_bp.add_url_rule("/", view_func=RecipeListView.as_view("list"))
 recipe_bp.add_url_rule("/new", view_func=RecipeCreateView.as_view("create"))
 recipe_bp.add_url_rule("/<int:recipe_id>", view_func=RecipeDetailView.as_view("detail"))
 recipe_bp.add_url_rule("/<int:recipe_id>/edit", view_func=RecipeEditView.as_view("edit"))
 recipe_bp.add_url_rule("/<int:recipe_id>/delete", view_func=RecipeDeleteView.as_view("delete"))
+recipe_bp.add_url_rule("/images/<path:filename>", view_func=RecipeImageView.as_view("image"))
 
 def register(app) -> None:
     app.register_blueprint(recipe_bp)
