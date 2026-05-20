@@ -12,7 +12,7 @@
             Cancel
         </a>
 
-        {% if recipe %}
+        {% if recipe and recipe.id is defined and recipe.id %}
             <form method="POST"
                   action="{{ url_for('recipes.delete', recipe_id=recipe.id) }}"
                   onsubmit="return confirm('Delete this recipe? This cannot be undone.');">
@@ -25,6 +25,8 @@
         {% endif %}
     </div>
 </div>
+
+{% include "includes/form_errors.html" %}
 
 <form method="POST">
     {% include "includes/csrf_token.html" %}
@@ -139,7 +141,7 @@
                                     <input
                                         type="text"
                                         class="form-control"
-                                        name="ingredients[]"
+                                        name="ingredients"
                                         value="{{ ingredient.text }}"
                                     >
 
@@ -156,7 +158,7 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    name="ingredients[]"
+                                    name="ingredients"
                                     placeholder="Ex: 2 chicken breasts"
                                 >
 
@@ -198,7 +200,7 @@
 
                                     <textarea
                                         class="form-control"
-                                        name="instructions[]"
+                                        name="instructions"
                                         rows="2">{{ step.text }}
                                     </textarea>
 
@@ -216,7 +218,7 @@
 
                                 <textarea
                                     class="form-control"
-                                    name="instructions[]"
+                                    name="instructions"
                                     rows="2"
                                     placeholder="Describe the cooking step"></textarea>
 

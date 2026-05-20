@@ -8,6 +8,7 @@ from flask import Flask
 from kitchen_keeper.blueprints import register_blueprints
 # While looking unused is needed for flask-migrate and SQLAlchemy to see table models
 import kitchen_keeper.models
+from kitchen_keeper.extensions.marshmallow import ma
 from kitchen_keeper.logging_config import configure_logging
 
 
@@ -27,6 +28,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
+    ma.init_app(app)
 
     # Discovery and register all application blueprints.
     register_blueprints(app)

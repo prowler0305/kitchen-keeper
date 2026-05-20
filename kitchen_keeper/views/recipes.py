@@ -1,46 +1,46 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 from flask.views import MethodView
 from kitchen_keeper.extensions.database import db
+from kitchen_keeper.forms import load_form_with_schema, build_form_view_model
 from kitchen_keeper.models import Recipe, RecipeIngredient, RecipeInstruction
-from sqlalchemy import select
+from kitchen_keeper.schemas.recipe import RecipeFormSchema
+from marshmallow import ValidationError
+from sqlalchemy import select, inspect
 
 recipe_bp = Blueprint("recipes", __name__, url_prefix="/recipes")
 TEMPLATE_PREFIX = "recipes/"
 
-RECIPE_FORM_FIELDS = {
-    "title": str,
-    "description": str,
-    "category": str,
-    "prep_time": str,
-    "cook_time": str,
-    "servings": int,
-    "tags": str,
-}
+def apply_recipe_form(recipe: Recipe, data) -> Recipe:
+    """
+    Transfer the validated form data into a Recipe object.
+    :param recipe:
+    :param data:
+    :return:
+    """
+    # Use SQLAlchemy inspect to retrieve the Recipe object definition to
+    # access the metadata of thr ORM model definition
+    mapper = inspect(type(recipe))
+    # Get the relationships list object.
+    relationships = mapper.relationships
 
-def apply_recipe_form(recipe: Recipe) -> None:
-    for field, converter in RECIPE_FORM_FIELDS.items():
-        value = request.form.get(field)
+    for field_name, value in data.items():
+        if field_name in relationships:
+            child_model = relationships[field_name].mapper.class_
 
-        if value == "":
-            value = None
+            setattr(
+                recipe,
+                field_name,
+                [
+                    child_model(
+                        position=index,
+                        text=text)
+                    for index, text in enumerate(value, start=1)
+                ]
+            )
+        else:
+            setattr(recipe, field_name, value)
 
-        if value is not None and converter is int:
-            value = int(value)
-
-        setattr(recipe, field, value)
-
-    recipe.ingredients = [
-        RecipeIngredient(position=index, text=value.strip())
-        for index, value in enumerate(request.form.getlist("ingredients[]"), start=1)
-        if value.strip()
-    ]
-
-    recipe.instructions = [
-        RecipeInstruction(position=index, text=value.strip())
-        for index, value in enumerate(request.form.getlist("instructions[]"), start=1)
-        if value.strip()
-    ]
-
+    return recipe
 
 class RecipeListView(MethodView):
     def get(self):
@@ -66,15 +66,29 @@ class RecipeCreateView(MethodView):
         Render the create html that includes the POST form.
         :return:
         """
-        return render_template(f"{TEMPLATE_PREFIX}create.html", recipe=None)
+        return render_template(
+            f"{TEMPLATE_PREFIX}create.html",
+            recipe=None,
+            errors={}
+        )
 
     def post(self):
         """
         Handle the add recipe form
         :return:
         """
+        schema = RecipeFormSchema()
+        try:
+            validated_data = load_form_with_schema(schema, request.form)
+        except ValidationError as error:
+            return render_template(
+                f"{TEMPLATE_PREFIX}create.html",
+                recipe=build_form_view_model(schema, request.form),
+                errors=error.messages
+            )
+
         recipe = Recipe()
-        apply_recipe_form(recipe)
+        apply_recipe_form(recipe, validated_data)
 
         db.session.add(recipe)
         db.session.commit()
@@ -83,8 +97,12 @@ class RecipeCreateView(MethodView):
 
 class RecipeEditView(MethodView):
     def get(self, recipe_id: int):
-        recipe = Recipe.query.get_or_404(recipe_id)
-        return render_template(f"{TEMPLATE_PREFIX}edit.html", recipe=recipe)
+        recipe = db.get_or_404(Recipe, recipe_id)
+        return render_template(
+            f"{TEMPLATE_PREFIX}edit.html",
+            recipe=recipe,
+            errors={}
+        )
 
     def post(self, recipe_id: int):
         """
@@ -93,7 +111,18 @@ class RecipeEditView(MethodView):
         """
         recipe = db.get_or_404(Recipe, recipe_id)
 
-        apply_recipe_form(recipe)
+        schema = RecipeFormSchema()
+        try:
+            validated_data = load_form_with_schema(schema, request.form)
+        except ValidationError as error:
+            # Re-render existing edit template
+            return render_template(
+                f"{TEMPLATE_PREFIX}edit.html",
+                recipe=build_form_view_model(schema, request.form, id=recipe.id),
+                errors=error.messages,
+            )
+
+        apply_recipe_form(recipe=recipe, data=validated_data)
 
         db.session.commit()
         flash("Recipe updated successfully!", "success")
