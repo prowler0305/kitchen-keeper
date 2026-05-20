@@ -41,3 +41,17 @@ def save_recipe_image(file: FileStorage) -> str | None:
 
     # return the stored filename
     return filename
+
+def delete_recipe_image(filename: str | None) -> None:
+    if not filename:
+        return
+
+    image_path = Path(current_app.config.get("RECIPE_IMAGE_UPLOAD_FOLDER")) / filename
+
+    try:
+        image_path.unlink(missing_ok=True)
+    except OSError:
+        current_app.logger.exception(
+            "Failed to delete recipe image",
+            extra={"filename": filename},
+        )

@@ -4,7 +4,7 @@ from kitchen_keeper.extensions.database import db
 from kitchen_keeper.forms import load_form_with_schema, build_form_view_model
 from kitchen_keeper.models import Recipe, RecipeIngredient, RecipeInstruction
 from kitchen_keeper.schemas.recipe import RecipeFormSchema
-from kitchen_keeper.uploads import save_recipe_image
+from kitchen_keeper.uploads import save_recipe_image, delete_recipe_image
 from marshmallow import ValidationError
 from sqlalchemy import select, inspect
 
@@ -164,8 +164,12 @@ class RecipeDeleteView(MethodView):
     def post(self, recipe_id: int):
         recipe = db.get_or_404(Recipe, recipe_id)
 
+        image_filename = recipe.image_filename
+
         db.session.delete(recipe)
         db.session.commit()
+
+        delete_recipe_image(image_filename)
         flash("Recipe deleted successfully!", "success")
         return redirect(url_for("recipes.list"))
 
