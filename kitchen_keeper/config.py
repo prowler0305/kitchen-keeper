@@ -9,7 +9,7 @@ class Config:
         "sqlite:///kitchen_keeper.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
+    LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
     WTF_CSRF_ENABLED = True
     BASE_DIR = Path(__file__).resolve().parent.parent
     UPLOAD_FOLDER = BASE_DIR / "instance" / "uploads"
@@ -22,3 +22,4 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI")

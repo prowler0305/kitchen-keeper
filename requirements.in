@@ -3,5 +3,6 @@ Flask-SQLAlchemy
 Flask-Migrate
 Flask-WTF
 flask-marshmallow
+gunicorn
 marshmallow-sqlalchemy
 psycopg[binary]
