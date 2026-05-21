@@ -14,9 +14,6 @@
     <!-- App styles loaded after Bootstrap so we can extend/override -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<script
-        src="{{ url_for('static', filename='css/bootstrap.bundle.min.js') }}">
-</script>
 <!--<body class="bg-purple-dark text-light">-->
 <body>
 {% include "components/navbar.html" %}
@@ -26,7 +23,7 @@
         {% if messages %}
             <div class="mb-4">
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show d-flex aligh-items-center justify-content-`between"
+                    <div class="alert alert-{{ category }} alert-dismissible fade show d-flex align-items-center justify-content-`between"
                          role="alert">
                         {{ message }}
 
