@@ -17,7 +17,7 @@ class Config:
     WTF_CSRF_ENABLED = True
     BASE_DIR = Path(__file__).resolve().parent.parent
     UPLOAD_FOLDER = BASE_DIR / "instance" / "uploads"
-    RECIPE_IMAGE_UPLOAD_FOLDER = UPLOAD_FOLDER / "recipes"
+    RECIPE_IMAGE_UPLOAD_FOLDER = Path(os.environ.get("RECIPE_IMAGE_UPLOAD_FOLDER", UPLOAD_FOLDER / "recipes"))
 
     @classmethod
     def configure(cls):
