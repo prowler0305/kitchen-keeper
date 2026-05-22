@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: local-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres_admin
+      POSTGRES_PASSWORD: dev_admin_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    image: kitchen-keeper:local
+    container_name: kitchen-keeper-app
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      APP_ENV: kitchen_keeper.config.ProductionConfig
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres_admin
+      POSTGRES_PASSWORD: dev_admin_password
+      POSTGRES_DB: kitchen_keeper_prod
+      RECIPE_IMAGE_UPLOAD_FOLDER: /app/uploads/recipes
+    ports:
+      - "8000:8000"
+    volumes:
+      - recipe_uploads:/app/uploads/recipes
+
+volumes:
+  postgres_data:
+  recipe_uploads:
