@@ -10,17 +10,17 @@ from kitchen_keeper.blueprints import register_blueprints
 import kitchen_keeper.models
 from kitchen_keeper.extensions.marshmallow import ma
 from kitchen_keeper.logging_config import configure_logging
+from werkzeug.utils import import_string
 
 
 def create_app():
     app = Flask(__name__)
+    config_path = os.environ.get("APP_ENV")
 
-    app.config.from_object(
-        os.environ.get(
-            "APP_ENV",
-            "kitchen_keeper.config.DevelopmentConfig"
-        )
-    )
+    config_class = import_string(config_path)
+    config_class.configure()
+
+    app.config.from_object(config_class)
 
     configure_logging(app)
 
