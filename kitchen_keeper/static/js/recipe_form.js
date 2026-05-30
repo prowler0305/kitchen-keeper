@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <input
                 type="text"
                 class="form-control"
-                name="ingredients[]"
+                name="ingredients"
                 placeholder="Ex: 2 chicken breasts"
             >
 
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <textarea
                 class="form-control"
-                name="instructions[]"
+                name="instructions"
                 rows="2"
                 placeholder="Describe the cooking step"></textarea>
 
