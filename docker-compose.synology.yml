@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   app:
-    image: prowler0305/kitchen-keeper:${APP_VERSION}
+    image: prowler0305/kitchen-keeper:latest
     container_name: kitchen-keeper-app
     restart: unless-stopped
     depends_on:
