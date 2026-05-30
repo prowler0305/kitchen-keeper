@@ -13,7 +13,7 @@ services:
 
   app:
     build: .
-    image: kitchen-keeper:local
+    image: kitchen-keeper-local
     container_name: kitchen-keeper-app
     restart: unless-stopped
     depends_on:
