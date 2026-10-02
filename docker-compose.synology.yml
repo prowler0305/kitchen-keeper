@@ -13,6 +13,7 @@ services:
 
   app:
     image: prowler0305/kitchen-keeper:latest
+    pull_policy: always
     container_name: kitchen-keeper-app
     restart: unless-stopped
     depends_on:

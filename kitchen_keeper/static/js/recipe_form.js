@@ -58,13 +58,63 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // addIngredientBtn.addEventListener("click", () => {
+    //     ingredientsList.appendChild(createIngredientRow());
+    // });
     addIngredientBtn.addEventListener("click", () => {
-        ingredientsList.appendChild(createIngredientRow());
+        const row = createIngredientRow();
+        ingredientsList.appendChild(row);
+        row.querySelector('input[name="ingredients"]').focus();
     });
 
+    // addStepBtn.addEventListener("click", () => {
+    //     const nextStepNumber = instructionsList.querySelectorAll(".instruction-row").length + 1;
+    //     instructionsList.appendChild(createInstructionRow(nextStepNumber));
+    // });
+
     addStepBtn.addEventListener("click", () => {
-        const nextStepNumber = instructionsList.querySelectorAll(".instruction-row").length + 1;
-        instructionsList.appendChild(createInstructionRow(nextStepNumber));
+        const nextStepNumber =
+            instructionsList.querySelectorAll(".instruction-row").length + 1;
+
+        const row = createInstructionRow(nextStepNumber);
+        instructionsList.appendChild(row);
+        row.querySelector('textarea[name="instructions"]').focus();
+    });
+
+    function addOnEnter(event, fieldSelector, addButton) {
+        if (
+            event.key !== "Enter" ||
+            !event.target.matches(fieldSelector) ||
+            event.shiftKey ||
+            event.ctrlKey ||
+            event.altKey ||
+            event.metaKey ||
+            event.isComposing
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (!event.repeat) {
+            addButton.click();
+        }
+    }
+
+    ingredientsList.addEventListener("keydown", (event) => {
+        addOnEnter(
+            event,
+            'input[name="ingredients"]',
+            addIngredientBtn
+        );
+    });
+
+    instructionsList.addEventListener("keydown", (event) => {
+        addOnEnter(
+            event,
+            'textarea[name="instructions"]',
+            addStepBtn
+        );
     });
 
     ingredientsList.addEventListener("click", (event) => {
